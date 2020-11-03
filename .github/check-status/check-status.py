@@ -6,6 +6,7 @@ from github import Github
 gh_ref = environ['GITHUB_REPOSITORY']
 gh_sha = environ['INPUT_SHA']
 
+exit(1)
 print('Getting status of %s @ %s...' % (gh_ref, gh_sha))
 
 status = Github(environ['INPUT_TOKEN']
@@ -16,4 +17,3 @@ for item in status.statuses:
 
 if status.state != 'success':
     print('Status not successful. Skipping...')
-    exit(1)

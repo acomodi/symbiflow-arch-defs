@@ -1,20 +1,30 @@
 name: Check all tests
 
 on:
-  status:
+  push:
 
 jobs:
 
   Check-statuses:
+    if: ${{ contains(github.event.branches.*.name, 'master') == 1  }}
     runs-on: ubuntu-latest
     steps:
+
+    - name: Debug Event
+      run: echo '${{ toJson(github.event) }}'
 
     - uses: actions/checkout@v2
 
     - uses: ./.github/check-status
+      id: check
       with:
         token: ${{ github.token }}
         sha: ${{ github.event.sha }}
+
+    - name: Check latest artifact URL
+      env:
+        STEPS_CONTEXT: ${{ toJson(steps)  }}
+      run: echo "$STEPS_CONTEXT"
 
     - name: Upload artifact URL file
       if: steps.check.outputs.skip != 'true'
