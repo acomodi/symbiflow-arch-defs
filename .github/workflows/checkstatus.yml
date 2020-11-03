@@ -1,4 +1,4 @@
-name: Check all tests
+name: Check all tests (status)
 
 on:
   status:
