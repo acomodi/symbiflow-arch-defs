@@ -1,7 +1,7 @@
 name: Check all tests
 
 on:
-  status:
+  pull_request:
 
 jobs:
 
