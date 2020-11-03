@@ -6,11 +6,12 @@ on:
 jobs:
 
   Check-statuses:
+    if: ${{ contains(github.event.branches.*.name, 'master') == 1  }}
     runs-on: ubuntu-latest
     steps:
 
     - name: Debug Event
-      run: echo '${{ toJson(github.event)  }}'
+      run: echo '${{ toJson(github.event) }}'
 
     - uses: actions/checkout@v2
 
