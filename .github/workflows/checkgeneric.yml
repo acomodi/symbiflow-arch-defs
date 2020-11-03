@@ -1,0 +1,34 @@
+name: Check all tests
+
+on:
+  push:
+
+jobs:
+
+  Check-statuses:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Debug Event
+      run: echo '${{ toJson(github.event) }}'
+
+    - uses: actions/checkout@v2
+
+    - uses: ./.github/check-status
+      id: check
+      with:
+        token: ${{ github.token }}
+        sha: ${{ github.event.sha }}
+
+    - name: Check latest artifact URL
+      env:
+        STEPS_CONTEXT: ${{ toJson(steps)  }}
+      run: echo "$STEPS_CONTEXT"
+
+    - name: Upload artifact URL file
+      if: steps.check.outputs.skip != 'true'
+      uses: weslenng/gcp-storage-sync@master
+      env:
+        GCP_SERVICE_ACCOUNT_KEY_FILE: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY_FILE }}
+        GCP_STORAGE_BUCKET: ${{ secrets.GCP_STORAGE_BUCKET }}
+        SOURCE_DIR: "install"
